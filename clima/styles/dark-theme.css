@@ -1,0 +1,160 @@
+/* Tema oscuro (por defecto) */
+[data-theme="dark"] {
+  --color-bg-primary: #111827;
+  --color-bg-secondary: #1F2937;
+  --color-bg-accent: #374151;
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #E5E7EB;
+  --color-text-accent: #3B82F6;
+  --color-border-primary: #374151;
+  --color-shadow-primary: rgba(0, 0, 0, 0.3);
+}
+
+/* Tema claro */
+[data-theme="light"] {
+  --color-bg-primary: #F9FAFB;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-accent: #E5E7EB;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-accent: #2563EB;
+  --color-border-primary: #E5E7EB;
+  --color-shadow-primary: rgba(0, 0, 0, 0.1);
+}
+
+/* Aplicación de variables de color */
+[data-theme="dark"],
+[data-theme="light"] {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-bg-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-bg-secondary);
+}
+
+.bg-accent {
+  background-color: var(--color-bg-accent);
+}
+
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-accent {
+  color: var(--color-text-accent);
+}
+
+.border-primary {
+  border-color: var(--color-border-primary);
+}
+
+.shadow-primary {
+  box-shadow: 0 4px 6px -1px var(--color-shadow-primary), 0 2px 4px -1px var(--color-shadow-primary);
+}
+
+/* Colores específicos para elementos climáticos */
+.weather-sunny {
+  --weather-primary: #F59E0B;
+  --weather-secondary: #FCD34D;
+}
+
+.weather-cloudy {
+  --weather-primary: #9CA3AF;
+  --weather-secondary: #D1D5DB;
+}
+
+.weather-rainy {
+  --weather-primary: #60A5FA;
+  --weather-secondary: #93C5FD;
+}
+
+.weather-stormy {
+  --weather-primary: #7C3AED;
+  --weather-secondary: #A78BFA;
+}
+
+.weather-snowy {
+  --weather-primary: #E0E7FF;
+  --weather-secondary: #FFFFFF;
+}
+
+/* Transiciones suaves para el cambio de tema */
+[data-theme="dark"] .theme-transition,
+[data-theme="light"] .theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Efectos hover para ambos temas */
+[data-theme="dark"] .hover-effect:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .hover-effect:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para la barra de búsqueda */
+.search-input {
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-primary);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* Estilos para gráficos en ambos temas */
+.chart-container-dark {
+  --chart-grid: rgba(255, 255, 255, 0.1);
+  --chart-text: rgba(255, 255, 255, 0.7);
+}
+
+.chart-container-light {
+  --chart-grid: rgba(0, 0, 0, 0.1);
+  --chart-text: rgba(0, 0, 0, 0.7);
+}
+
+/* Ajustes específicos para el mapa en modo claro */
+[data-theme="light"] .leaflet-tile {
+  filter: brightness(0.9) contrast(1.1);
+}
+
+/* Estilos para el botón de favoritos */
+.favorite-btn {
+  color: var(--color-text-secondary);
+}
+
+.favorite-btn:hover {
+  color: #EF4444;
+}
+
+.favorite-btn.active {
+  color: #EF4444;
+  fill: #EF4444;
+}
+
+/* Clases para condiciones climáticas específicas */
+.weather-condition {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+[data-theme="dark"] .weather-condition {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="light"] .weather-condition {
+  background-color: rgba(0, 0, 0, 0.05);
+}
