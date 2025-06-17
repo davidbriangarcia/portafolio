@@ -6,11 +6,10 @@
     <title>ClimateTravel | Tu guía meteorológica para viajes</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/dark-theme.css">
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/dark-theme.css">
 </head>
 <body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
-    <!-- Header -->
     <header class="bg-gray-800 shadow-lg py-4 px-6 flex justify-between items-center">
         <div class="flex items-center space-x-2">
             <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,9 +32,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex flex-1 overflow-hidden">
-        <!-- Sidebar - Favoritos -->
         <aside class="w-64 bg-gray-800 p-4 hidden md:block overflow-y-auto">
             <h2 class="text-lg font-semibold mb-4 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -44,13 +41,10 @@
                 Ciudades Favoritas
             </h2>
             <ul id="favorites-list" class="space-y-2">
-                <!-- Dinámico desde JS -->
             </ul>
         </aside>
 
-        <!-- Content Area -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Mapa -->
             <div class="h-1/2 bg-gray-700 relative">
                 <div id="map" class="h-full w-full"></div>
                 <div class="absolute bottom-4 left-4 z-10 bg-gray-800 bg-opacity-90 p-3 rounded-lg shadow-lg">
@@ -70,9 +64,7 @@
                 </div>
             </div>
 
-            <!-- Paneles de información -->
             <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Pronóstico por horas -->
                 <div class="bg-gray-800 rounded-xl p-6 shadow-lg lg:col-span-2">
                     <h2 class="text-lg font-semibold mb-4">Pronóstico por horas</h2>
                     <div class="h-64">
@@ -80,7 +72,6 @@
                     </div>
                 </div>
 
-                <!-- Datos actuales -->
                 <div class="bg-gray-800 rounded-xl p-6 shadow-lg">
                     <h2 class="text-lg font-semibold mb-4">Condiciones actuales</h2>
                     <div class="space-y-4">
@@ -111,15 +102,12 @@
                     </div>
                 </div>
 
-                <!-- Pronóstico 5 días -->
                 <div class="bg-gray-800 rounded-xl p-6 shadow-lg lg:col-span-3">
                     <h2 class="text-lg font-semibold mb-4">Pronóstico para 5 días</h2>
                     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4" id="forecast-days">
-                        <!-- Dinámico desde JS -->
                     </div>
                 </div>
 
-                <!-- Datos históricos -->
                 <div class="bg-gray-800 rounded-xl p-6 shadow-lg lg:col-span-2">
                     <h2 class="text-lg font-semibold mb-4">Datos históricos</h2>
                     <div class="h-64">
@@ -127,7 +115,6 @@
                     </div>
                 </div>
 
-                <!-- Información turística -->
                 <div class="bg-gray-800 rounded-xl p-6 shadow-lg">
                     <h2 class="text-lg font-semibold mb-4">Información turística</h2>
                     <div id="travel-info" class="text-gray-300">
@@ -138,7 +125,6 @@
         </div>
     </main>
 
-    <!-- Mobile Navigation -->
     <nav class="md:hidden bg-gray-800 fixed bottom-0 w-full flex justify-around py-3">
         <button class="p-2 rounded-full hover:bg-gray-700 transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,13 +143,12 @@
         </button>
     </nav>
 
-    <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/map.js"></script>
-    <script src="scripts/weather.js"></script>
-    <script src="scripts/favorites.js"></script>
+    <script src="./scripts/app.js"></script>
+    <script src="./scripts/map.js"></script>
+    <script src="./scripts/weather.js"></script>
+    <script src="./scripts/favorites.js"></script>
 </body>
 </html>
