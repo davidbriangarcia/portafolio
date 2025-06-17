@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería Fotográfica | Portafolio Frontend</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --dark-bg: #1a1a2e;
+            --light-bg: #16213e;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+            --border-radius: 15px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--light-bg) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 90px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: var(--shadow-soft);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-placeholder {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #fff;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 50px 12px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin: 1.5rem auto 2rem auto;
+            max-width: 800px;
+            border: 3px dashed rgba(255, 255, 255, 0.3);
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .upload-section:hover,
+        .upload-section.drag-over {
+            border-color: var(--accent-color);
+            background: rgba(240, 147, 251, 0.1);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+            color: var(--accent-color);
+        }
+
+        .gallery-container {
+            padding: 2rem 1rem;
+            background: none;
+        }
+
+        .gallery-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .masonry-grid {
+            display: grid;
+            grid-gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-auto-rows: 10px;
+        }
+
+        .masonry-item {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            background: rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .masonry-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .masonry-item:hover .masonry-img {
+            transform: scale(1.05);
+        }
+
+        .image-info {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .image-source {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.08);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .image-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 26, 46, 0.97);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            background: var(--light-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lightbox-img-container {
+            position: relative;
+            max-height: 70vh;
+            overflow: auto;
+            background: #111;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 70vh;
+            display: block;
+            margin: 0 auto;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .lightbox-controls {
+            padding: 1.5rem;
+            background: var(--light-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+
+        /* ===== EDITOR DE IMÁGENES ===== */
+        .edit-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            background: var(--light-bg);
+        }
+
+        .edit-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .edit-tab.active {
+            border-bottom-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .edit-panel {
+            padding: 1.5rem;
+            display: none;
+            background: var(--light-bg);
+        }
+
+        .edit-panel.active {
+            display: block;
+        }
+
+        .filter-control {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 120px;
+            margin-bottom: 1rem;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .filter-slider {
+            width: 100%;
+            height: 6px;
+            appearance: none;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+        }
+
+        .filter-slider::-webkit-slider-thumb {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .filter-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(240, 147, 251, 0.3);
+        }
+
+        .filter-presets {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-preset {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+
+        .filter-preset:hover {
+            background: var(--accent-color);
+            color: #fff;
+        }
+
+        .crop-area {
+            max-height: 50vh;
+            overflow: hidden;
+            background: #111;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .save-btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(45deg, var(--accent-color), var(--primary-color));
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .search-container {
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .gallery-container {
+                padding: 1rem;
+            }
+
+            .masonry-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+
+            .lightbox-controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-control {
+                min-width: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-title {
+                font-size: 1.2rem;
+            }
+            .masonry-grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-section {
+                padding: 2rem 1rem;
+            }
+        }
+
+        .filter-none { filter: none; }
+        .filter-grayscale { filter: grayscale(100%); }
+        .filter-sepia { filter: sepia(100%); }
+        .filter-blur { filter: blur(3px); }
+        .filter-brightness { filter: brightness(150%); }
+        .filter-contrast { filter: contrast(200%); }
+        .filter-hue-rotate { filter: hue-rotate(90deg); }
+        .filter-saturate { filter: saturate(200%); }
+        .filter-invert { filter: invert(100%); }
+
+        #selectFilesBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="logo-placeholder">LP</div>
+            <span class="brand-name">Galería Fotográfica</span>
+        </div>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar imágenes...">
+        </div>
+        <button class="upload-btn">
+            <i class="fas fa-cloud-upload-alt"></i>
+            Subir imágenes
+        </button>
+    </nav>
+
+    <div class="upload-section" id="uploadArea" style="display: none;">
+        <div class="upload-icon">
+            <i class="fas fa-cloud-upload-alt"></i>
+        </div>
+        <h2>Arrastra y suelta tus imágenes aquí</h2>
+        <p>o</p>
+        <button class="upload-btn" id="selectFilesBtn">
+            <i class="fas fa-folder-open"></i>
+            Seleccionar archivos
+        </button>
+        <input type="file" id="fileInput" class="file-input" accept="image/*" multiple>
+    </div>
+
+    <div class="gallery-container">
+        <h1 class="gallery-title">Explora imágenes increíbles</h1>
+        <div class="masonry-grid" id="galleryGrid">
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="closeLightbox">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="lightbox-content">
+            <div class="lightbox-img-container">
+                <img id="lightboxImage" class="lightbox-img" src="" alt="">
+            </div>
+            <div class="edit-tabs">
+                <button class="edit-tab active" data-tab="filters">Filtros</button>
+                <button class="edit-tab" data-tab="crop">Recortar</button>
+            </div>
+            <div class="edit-panel active" data-panel="filters">
+                <div class="filter-control">
+                    <label class="filter-label">Brillo: <span id="brightnessValue">100%</span></label>
+                    <input type="range" class="filter-slider" id="brightnessSlider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label class="filter-label">Contraste: <span id="contrastValue">100%</span></label>
+                    <input type="range" class="filter-slider" id="contrastSlider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label class="filter-label">Saturación: <span id="saturationValue">100%</span></label>
+                    <input type="range" class="filter-slider" id="saturationSlider" min="0" max="200" value="100">
+                </div>
+                <div class="filter-control">
+                    <label class="filter-label">Desenfoque: <span id="blurValue">0px</span></label>
+                    <input type="range" class="filter-slider" id="blurSlider" min="0" max="10" value="0">
+                </div>
+                <h3>Filtros preestablecidos:</h3>
+                <div class="filter-presets">
+                    <button class="filter-preset" data-filter="none">Normal</button>
+                    <button class="filter-preset" data-filter="grayscale">Escala de grises</button>
+                    <button class="filter-preset" data-filter="sepia">Sepia</button>
+                    <button class="filter-preset" data-filter="invert">Invertir</button>
+                    <button class="filter-preset" data-filter="hue-rotate">Tonalidad</button>
+                </div>
+            </div>
+            <div class="edit-panel" data-panel="crop">
+                <div class="crop-area">
+                    <img id="cropImage" src="" alt="">
+                </div>
+            </div>
+            <div class="lightbox-controls">
+                <button class="action-btn" id="resetFilters">
+                    <i class="fas fa-undo"></i> Reiniciar
+                </button>
+                <button class="save-btn" id="saveChanges">
+                    <i class="fas fa-save"></i> Guardar cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script>
+        const API_KEYS = {
+            pexels: 'Wp02uv89PXLIn2HuuhUxV31gCp61JWRtrDOUr6jVwYKN4weV1fhZrMn7',
+            pixabay: '50789968-19decfa3383bd42a6f83864f9'
+        };
+
+        let currentImages = [];
+        let lightboxImage = null;
+        let cropper = null;
+        let currentFilter = 'none';
+        let currentImageId = null;
+
+        const elements = {
+            galleryGrid: document.getElementById('galleryGrid'),
+            searchInput: document.querySelector('.search-input'),
+            uploadBtn: document.querySelector('.upload-btn'),
+            uploadArea: document.getElementById('uploadArea'),
+            selectFilesBtn: document.getElementById('selectFilesBtn'),
+            fileInput: document.getElementById('fileInput'),
+            lightbox: document.getElementById('lightbox'),
+            lightboxImage: document.getElementById('lightboxImage'),
+            closeLightbox: document.getElementById('closeLightbox'),
+            cropImage: document.getElementById('cropImage'),
+            editTabs: document.querySelectorAll('.edit-tab'),
+            editPanels: document.querySelectorAll('.edit-panel'),
+            brightnessSlider: document.getElementById('brightnessSlider'),
+            contrastSlider: document.getElementById('contrastSlider'),
+            saturationSlider: document.getElementById('saturationSlider'),
+            blurSlider: document.getElementById('blurSlider'),
+            brightnessValue: document.getElementById('brightnessValue'),
+            contrastValue: document.getElementById('contrastValue'),
+            saturationValue: document.getElementById('saturationValue'),
+            blurValue: document.getElementById('blurValue'),
+            filterPresets: document.querySelectorAll('.filter-preset'),
+            resetFilters: document.getElementById('resetFilters'),
+            saveChanges: document.getElementById('saveChanges')
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchInitialImages();
+
+            elements.searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchImages(elements.searchInput.value);
+                }
+            });
+
+            elements.uploadBtn.addEventListener('click', toggleUploadArea);
+            elements.selectFilesBtn.addEventListener('click', () => elements.fileInput.click());
+            elements.fileInput.addEventListener('change', handleFileSelect);
+
+            setupDragAndDrop();
+
+            elements.closeLightbox.addEventListener('click', closeLightbox);
+            elements.editTabs.forEach(tab => {
+                tab.addEventListener('click', switchEditTab);
+            });
+
+            setupFilterControls();
+
+            elements.resetFilters.addEventListener('click', resetFilters);
+            elements.saveChanges.addEventListener('click', saveImageChanges);
+        });
+
+        // Funciones principales
+        async function fetchInitialImages() {
+            const topics = [
+                'nature', 'flowers', 'mountains', 'beach', 'sunset', 'animals', 'forest', 'sky',
+                'art', 'travel', 'city', 'food', 'love', 'music', 'dream', 'stars', 'water', 'autumn', 'spring', 'winter', 'vintage', 'anime'
+            ];
+            const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+
+            try {
+                const pexelsResponse = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(randomTopic)}&per_page=20`, {
+                    headers: {
+                        'Authorization': API_KEYS.pexels
+                    }
+                });
+                const pexelsData = await pexelsResponse.json();
+                const pexelsImages = pexelsData.photos.map(photo => ({
+                    id: `pexels-${photo.id}`,
+                    src: photo.src.medium,
+                    photographer: photo.photographer,
+                    source: 'Pexels'
+                }));
+
+                const pixabayResponse = await fetch(`https://pixabay.com/api/?key=${API_KEYS.pixabay}&q=${encodeURIComponent(randomTopic)}&image_type=photo&per_page=20`);
+                const pixabayData = await pixabayResponse.json();
+                const pixabayImages = pixabayData.hits.map(hit => ({
+                    id: `pixabay-${hit.id}`,
+                    src: hit.webformatURL,
+                    photographer: hit.user,
+                    source: 'Pixabay'
+                }));
+
+                currentImages = [...pexelsImages, ...pixabayImages];
+                displayImages(currentImages);
+            } catch (error) {
+                console.error('Error fetching images:', error);
+                alert('Error al cargar las imágenes. Por favor, intenta nuevamente.');
+            }
+        }
+
+        async function searchImages(query) {
+            if (!query.trim()) return;
+
+            try {
+                const [pexelsResponse, pixabayResponse] = await Promise.all([
+                    fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20`, {
+                        headers: {
+                            'Authorization': API_KEYS.pexels
+                        }
+                    }),
+                    fetch(`https://pixabay.com/api/?key=${API_KEYS.pixabay}&q=${encodeURIComponent(query)}&image_type=photo&per_page=20`)
+                ]);
+
+                const pexelsData = await pexelsResponse.json();
+                const pixabayData = await pixabayResponse.json();
+
+                const pexelsImages = pexelsData.photos?.map(photo => ({
+                    id: `pexels-${photo.id}`,
+                    src: photo.src.medium,
+                    photographer: photo.photographer,
+                    source: 'Pexels'
+                })) || [];
+
+                const pixabayImages = pixabayData.hits?.map(hit => ({
+                    id: `pixabay-${hit.id}`,
+                    src: hit.webformatURL,
+                    photographer: hit.user,
+                    source: 'Pixabay'
+                })) || [];
+
+                currentImages = [...pexelsImages, ...pixabayImages];
+                displayImages(currentImages);
+            } catch (error) {
+                console.error('Error searching images:', error);
+                alert('Error al buscar imágenes. Por favor, intenta nuevamente.');
+            }
+        }
+
+        function displayImages(images) {
+            elements.galleryGrid.innerHTML = '';
+            
+            images.forEach(image => {
+                const item = document.createElement('div');
+                item.className = 'masonry-item';
+                item.dataset.id = image.id;
+                
+                const img = document.createElement('img');
+                img.className = 'masonry-img';
+                img.src = image.src;
+                img.alt = `Foto por ${image.photographer}`;
+                img.loading = 'lazy';
+                
+                const info = document.createElement('div');
+                info.className = 'image-info';
+                
+                const source = document.createElement('span');
+                source.className = 'image-source';
+                source.textContent = image.source;
+                
+                const actions = document.createElement('div');
+                actions.className = 'image-actions';
+                
+                const editBtn = document.createElement('button');
+                editBtn.className = 'action-btn';
+                editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                editBtn.title = 'Editar imagen';
+                
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'action-btn';
+                deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                deleteBtn.title = 'Eliminar imagen';
+                
+                actions.appendChild(editBtn);
+                actions.appendChild(deleteBtn);
+                info.appendChild(source);
+                info.appendChild(actions);
+                item.appendChild(img);
+                item.appendChild(info);
+                elements.galleryGrid.appendChild(item);
+                
+                img.onload = function() {
+                    const aspectRatio = img.naturalHeight / img.naturalWidth;
+                    const gridSpan = Math.ceil(aspectRatio * 10);
+                    item.style.gridRowEnd = `span ${gridSpan}`;
+                };
+                
+                img.addEventListener('click', () => openLightbox(image));
+                
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteImage(image.id);
+                });
+            });
+        }
+
+        function openLightbox(image) {
+            currentImageId = image.id;
+            lightboxImage = image;
+            
+            elements.lightboxImage.src = image.src;
+            elements.cropImage.src = image.src;
+            
+            resetFilters();
+            
+            elements.lightbox.classList.add('active');
+            
+            if (!cropper) {
+                cropper = new Cropper(elements.cropImage, {
+                    aspectRatio: NaN,
+                    viewMode: 1,
+                    autoCropArea: 0.8,
+                    responsive: true,
+                    restore: false
+                });
+            } else {
+                cropper.replace(image.src);
+            }
+        }
+
+        function closeLightbox() {
+            elements.lightbox.classList.remove('active');
+            currentImageId = null;
+            lightboxImage = null;
+        }
+
+        function toggleUploadArea() {
+            elements.uploadArea.style.display = elements.uploadArea.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function setupDragAndDrop() {
+            const uploadArea = elements.uploadArea;
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                uploadArea.classList.add('drag-over');
+            }
+            
+            function unhighlight() {
+                uploadArea.classList.remove('drag-over');
+            }
+            
+            uploadArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+        }
+
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+            elements.fileInput.value = '';
+        }
+
+        function handleFiles(files) {
+            if (!files.length) return;
+            
+            Array.from(files).forEach(file => {
+                if (!file.type.match('image.*')) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageId = `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+                    const newImage = {
+                        id: imageId,
+                        src: e.target.result,
+                        photographer: 'Tú',
+                        source: 'Local'
+                    };
+                    
+                    currentImages.unshift(newImage);
+                    displayImages(currentImages);
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            toggleUploadArea();
+        }
+
+        function deleteImage(imageId) {
+            currentImages = currentImages.filter(img => img.id !== imageId);
+            displayImages(currentImages);
+            
+            if (currentImageId === imageId) {
+                closeLightbox();
+            }
+        }
+
+        function switchEditTab(e) {
+            const tab = e.target;
+            const tabName = tab.dataset.tab;
+            
+            elements.editTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            elements.editPanels.forEach(panel => {
+                panel.classList.remove('active');
+                if (panel.dataset.panel === tabName) {
+                    panel.classList.add('active');
+                }
+            });
+        }
+
+        function setupFilterControls() {
+            elements.brightnessSlider.addEventListener('input', updateFilter);
+            elements.contrastSlider.addEventListener('input', updateFilter);
+            elements.saturationSlider.addEventListener('input', updateFilter);
+            elements.blurSlider.addEventListener('input', updateFilter);
+            
+            elements.filterPresets.forEach(preset => {
+                preset.addEventListener('click', () => {
+                    currentFilter = preset.dataset.filter;
+                    updateFilter();
+                });
+            });
+        }
+
+        function updateFilter() {
+            elements.brightnessValue.textContent = `${elements.brightnessSlider.value}%`;
+            elements.contrastValue.textContent = `${elements.contrastSlider.value}%`;
+            elements.saturationValue.textContent = `${elements.saturationSlider.value}%`;
+            elements.blurValue.textContent = `${elements.blurSlider.value}px`;
+            
+            const brightness = parseInt(elements.brightnessSlider.value) / 100;
+            const contrast = parseInt(elements.contrastSlider.value) / 100;
+            const saturation = parseInt(elements.saturationSlider.value) / 100;
+            const blur = parseInt(elements.blurSlider.value);
+            
+            let filterValue = '';
+            
+            if (currentFilter === 'grayscale') {
+                filterValue += 'grayscale(1) ';
+            } else if (currentFilter === 'sepia') {
+                filterValue += 'sepia(1) ';
+            } else if (currentFilter === 'invert') {
+                filterValue += 'invert(1) ';
+            } else if (currentFilter === 'hue-rotate') {
+                filterValue += 'hue-rotate(90deg) ';
+            }
+            
+            filterValue += `brightness(${brightness}) contrast(${contrast}) saturate(${saturation}) blur(${blur}px)`;
+            
+            elements.lightboxImage.style.filter = filterValue;
+        }
+
+        function resetFilters() {
+            elements.brightnessSlider.value = 100;
+            elements.contrastSlider.value = 100;
+            elements.saturationSlider.value = 100;
+            elements.blurSlider.value = 0;
+            
+            currentFilter = 'none';
+            
+            elements.brightnessValue.textContent = '100%';
+            elements.contrastValue.textContent = '100%';
+            elements.saturationValue.textContent = '100%';
+            elements.blurValue.textContent = '0px';
+            
+            elements.lightboxImage.style.filter = 'none';
+            
+            if (cropper) {
+                cropper.reset();
+            }
+        }
+
+        function saveImageChanges() {
+            if (!currentImageId || !lightboxImage) return;
+            
+            let editedImage;
+            
+            const activeTab = document.querySelector('.edit-tab.active');
+            if (activeTab && activeTab.dataset.tab === 'crop') {
+                const canvas = cropper.getCroppedCanvas({
+                    width: 800,
+                    height: 600,
+                    minWidth: 256,
+                    minHeight: 256,
+                    maxWidth: 4096,
+                    maxHeight: 4096,
+                    fillColor: '#fff',
+                    imageSmoothingEnabled: true,
+                    imageSmoothingQuality: 'high'
+                });
+                
+                editedImage = canvas.toDataURL('image/jpeg', 0.9);
+            } else {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = elements.lightboxImage;
+                
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                
+                ctx.filter = img.style.filter || 'none';
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                
+                editedImage = canvas.toDataURL('image/jpeg', 0.9);
+            }
+            
+            const imageIndex = currentImages.findIndex(img => img.id === currentImageId);
+            if (imageIndex !== -1) {
+                currentImages[imageIndex].src = editedImage;
+                displayImages(currentImages);
+            }
+            
+            closeLightbox();
+        }
+    </script>
+</body>
+</html>
