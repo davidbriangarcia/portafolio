@@ -33,7 +33,7 @@
             color: var(--text-light);
             min-height: 100vh;
             line-height: 1.6;
-            padding-top: 90px;
+            padding-top: 75px;
         }
 
         .navbar {
@@ -170,7 +170,7 @@
         }
 
         .gallery-container {
-            padding: 2rem 1rem;
+            padding: 1rem 1rem;
             background: none;
         }
 
@@ -330,7 +330,6 @@
             transform: scale(1.1);
         }
 
-        /* ===== EDITOR DE IMÁGENES ===== */
         .edit-tabs {
             display: flex;
             border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -454,8 +453,11 @@
             transform: translateY(-2px);
         }
 
-        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
+            body {
+                padding-top: 180px;
+            }
+
             .navbar {
                 flex-direction: column;
                 gap: 1rem;
@@ -605,12 +607,12 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
         const API_KEYS = {
             pexels: 'Wp02uv89PXLIn2HuuhUxV31gCp61JWRtrDOUr6jVwYKN4weV1fhZrMn7',
-            pixabay: '50789968-19decfa3383bd42a6f83864f9'
+            pixabay: '50789968-19decfa3383bd42a6f83864f9',
+            unsplash: 'auXQYD1Vzkb_2Wsye5qzQvaMpa5Ipw0V_m2elP02R4w'
         };
 
         let currentImages = [];
@@ -671,7 +673,6 @@
             elements.saveChanges.addEventListener('click', saveImageChanges);
         });
 
-        // Funciones principales
         async function fetchInitialImages() {
             const topics = [
                 'nature', 'flowers', 'mountains', 'beach', 'sunset', 'animals', 'forest', 'sky',
@@ -702,7 +703,16 @@
                     source: 'Pixabay'
                 }));
 
-                currentImages = [...pexelsImages, ...pixabayImages];
+                const unsplashResponse = await fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(randomTopic)}&per_page=20&client_id=${API_KEYS.unsplash}`);
+                const unsplashData = await unsplashResponse.json();
+                const unsplashImages = unsplashData.results.map(photo => ({
+                    id: `unsplash-${photo.id}`,
+                    src: photo.urls.regular,
+                    photographer: photo.user.name,
+                    source: 'Unsplash'
+                }));
+
+                currentImages = [...pexelsImages, ...pixabayImages, ...unsplashImages];
                 displayImages(currentImages);
             } catch (error) {
                 console.error('Error fetching images:', error);
@@ -714,17 +724,19 @@
             if (!query.trim()) return;
 
             try {
-                const [pexelsResponse, pixabayResponse] = await Promise.all([
+                const [pexelsResponse, pixabayResponse, unsplashResponse] = await Promise.all([
                     fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=20`, {
                         headers: {
                             'Authorization': API_KEYS.pexels
                         }
                     }),
-                    fetch(`https://pixabay.com/api/?key=${API_KEYS.pixabay}&q=${encodeURIComponent(query)}&image_type=photo&per_page=20`)
+                    fetch(`https://pixabay.com/api/?key=${API_KEYS.pixabay}&q=${encodeURIComponent(query)}&image_type=photo&per_page=20`),
+                    fetch(`https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=20&client_id=${API_KEYS.unsplash}`)
                 ]);
 
                 const pexelsData = await pexelsResponse.json();
                 const pixabayData = await pixabayResponse.json();
+                const unsplashData = await unsplashResponse.json();
 
                 const pexelsImages = pexelsData.photos?.map(photo => ({
                     id: `pexels-${photo.id}`,
@@ -740,7 +752,14 @@
                     source: 'Pixabay'
                 })) || [];
 
-                currentImages = [...pexelsImages, ...pixabayImages];
+                const unsplashImages = unsplashData.results?.map(photo => ({
+                    id: `unsplash-${photo.id}`,
+                    src: photo.urls.regular,
+                    photographer: photo.user.name,
+                    source: 'Unsplash'
+                })) || [];
+
+                currentImages = [...pexelsImages, ...pixabayImages, ...unsplashImages];
                 displayImages(currentImages);
             } catch (error) {
                 console.error('Error searching images:', error);
@@ -878,7 +897,7 @@
 
         function handleFileSelect(e) {
             handleFiles(e.target.files);
-            elements.fileInput.value = '';
+            elements.fileInput.value = ''; 
         }
 
         function handleFiles(files) {
