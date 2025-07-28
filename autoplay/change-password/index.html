@@ -36,31 +36,39 @@
   </div>
 
   <script>
-    const SUPABASE_URL = 'https://tugzzpqeuuwcipkcprsm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z3p6cHFldXV3Y2lwa2NwcnNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1MjY0MTEsImV4cCI6MjA2MzEwMjQxMX0.jjjLGa-1q5iZ282YF6es_CsaS0eu7e6uIwyLjLw0LsU';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // IMPORTANT: Replace with your actual Supabase URL and Anon Key
+        const SUPABASE_URL = 'https://tugzzpqeuuwcipkcprsm.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1Z3p6cHFldXV3Y2lwa2NwcnNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1MjY0MTEsImV4cCI6MjA2MzEwMjQxMX0.jjjLGa-1q5iZ282YF6es_CsaS0eu7e6uIwyLjLw0LsU'; // Make sure to replace this!
 
-    const messageEl = document.getElementById('message');
-    const form = document.getElementById('password-form');
+        // Correctly initialize the Supabase client
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const newPassword = document.getElementById('new-password').value;
-      messageEl.textContent = 'Updating...';
-      messageEl.className = 'mt-4 text-center text-sm font-medium text-gray-300';
+        const messageEl = document.getElementById('message');
+        const form = document.getElementById('password-form');
 
-      const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+        form.addEventListener('submit', async (event) => {
+            // This prevents the page from reloading
+            event.preventDefault(); 
+            
+            const newPassword = document.getElementById('new-password').value;
+            messageEl.textContent = 'Updating...';
+            messageEl.style.color = 'black';
 
-      if (error) {
-        messageEl.textContent = '❌ ' + error.message;
-        messageEl.className = 'mt-4 text-center text-sm font-medium text-red-400';
-      } else {
-        messageEl.textContent = '✅ Password updated! You can now close this window and log in using the new password.';
-        messageEl.className = 'mt-4 text-center text-sm font-medium text-green-400';
-        form.style.display = 'none';
-      }
-    });
-  </script>
+            // Supabase JS client automatically handles the session from the URL fragment
+            const { data, error } = await supabaseClient.auth.updateUser({
+                password: newPassword
+            });
+
+            if (error) {
+                messageEl.textContent = 'Error: ' + error.message;
+                messageEl.style.color = 'red';
+            } else {
+                messageEl.textContent = 'Password updated successfully! You can now close this page and log in with your new password in the AutoPlay app.';
+                messageEl.style.color = 'green';
+                form.style.display = 'none'; // Hide the form on success
+            }
+        });
+    </script>
 
 </body>
 </html>
