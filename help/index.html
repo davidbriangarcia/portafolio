@@ -1,0 +1,154 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Help Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8">
+        <header class="mb-8 text-center">
+            <h1 id="main-heading" class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Help Center</h1>
+            <p id="header-text" class="text-gray-300 mt-2">Find answers to your questions below.</p>
+        </header>
+
+        <div class="flex justify-end mb-4">
+            <select id="language-switcher" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+            </select>
+        </div>
+
+        <div id="help-content-en" class="space-y-8">
+            <!-- Getting Started -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Getting Started</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="getting_started_initial_setup_en.html" class="text-blue-400 hover:underline">Guide for initial setup and first time use</a></li>
+                    <li><a href="getting_started_record_play_en.html" class="text-blue-400 hover:underline">Basic steps to record and play your first macro</a></li>
+                </ul>
+            </div>
+
+            <!-- How to Use -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">How to Use</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="how_to_use_start_stop_en.html" class="text-blue-400 hover:underline">How to start, stop, and pause a macro</a></li>
+                    <li><a href="how_to_use_playback_en.html" class="text-blue-400 hover:underline">How to select and playback recorded macros</a></li>
+                    <li><a href="how_to_use_saving_loading_en.html" class="text-blue-400 hover:underline">Saving, loading, and deleting macros</a></li>
+                    <li><a href="how_to_use_hotkeys_en.html" class="text-blue-400 hover:underline">Explanation of hotkeys</a></li>
+                    <li><a href="how_to_use_upgrade_en.html" class="text-blue-400 hover:underline">How to upgrade to premium</a></li>
+                </ul>
+            </div>
+
+            <!-- Troubleshooting -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Troubleshooting</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="troubleshooting_common_issues_en.html" class="text-blue-400 hover:underline">Common Issues</a></li>
+                    <li><a href="troubleshooting_diagnose_en.html" class="text-blue-400 hover:underline">Solutions or steps to diagnose</a></li>
+                </ul>
+            </div>
+
+            <!-- FAQ -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">FAQ</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="faq_what_is_macro_en.html" class="text-blue-400 hover:underline">What's a macro?</a></li>
+                    <li><a href="faq_reset_password_en.html" class="text-blue-400 hover:underline">How do I reset my password?</a></li>
+                    <li><a href="faq_cancel_subscription_en.html" class="text-blue-400 hover:underline">How can I cancel my subscription?</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="help-content-es" class="space-y-8 hidden">
+            <!-- Primeros Pasos -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Primeros Pasos</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="getting_started_initial_setup_es.html" class="text-blue-400 hover:underline">Guía para la configuración inicial y primer uso</a></li>
+                    <li><a href="getting_started_record_play_es.html" class="text-blue-400 hover:underline">Pasos básicos para grabar y reproducir tu primer macro</a></li>
+                </ul>
+            </div>
+
+            <!-- Cómo Usar -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Cómo Usar</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="how_to_use_start_stop_es.html" class="text-blue-400 hover:underline">Cómo iniciar, detener y pausar un macro</a></li>
+                    <li><a href="how_to_use_playback_es.html" class="text-blue-400 hover:underline">Cómo seleccionar y reproducir macros grabados</a></li>
+                    <li><a href="how_to_use_saving_loading_es.html" class="text-blue-400 hover:underline">Guardar, cargar y eliminar macros</a></li>
+                    <li><a href="how_to_use_hotkeys_es.html" class="text-blue-400 hover:underline">Explicación de las teclas de acceso rápido</a></li>
+                    <li><a href="how_to_use_upgrade_es.html" class="text-blue-400 hover:underline">Cómo actualizar a premium</a></li>
+                </ul>
+            </div>
+
+            <!-- Solución de Problemas -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Solución de Problemas</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="troubleshooting_common_issues_es.html" class="text-blue-400 hover:underline">Problemas Comunes</a></li>
+                    <li><a href="troubleshooting_diagnose_es.html" class="text-blue-400 hover:underline">Soluciones o pasos para diagnosticar</a></li>
+                </ul>
+            </div>
+
+            <!-- Preguntas Frecuentes -->
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Preguntas Frecuentes</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><a href="faq_what_is_macro_es.html" class="text-blue-400 hover:underline">¿Qué es un macro?</a></li>
+                    <li><a href="faq_reset_password_es.html" class="text-blue-400 hover:underline">¿Cómo restablezco mi contraseña?</a></li>
+                    <li><a href="faq_cancel_subscription_es.html" class="text-blue-400 hover:underline">¿Cómo puedo cancelar mi suscripción?</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+    const switcher = document.getElementById('language-switcher');
+    const contentEn = document.getElementById('help-content-en');
+    const contentEs = document.getElementById('help-content-es');
+
+    // Load language from localStorage if available
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang) {
+        switcher.value = savedLang;
+        toggleLanguage(savedLang);
+    } else {
+        toggleLanguage(switcher.value);
+    }
+
+    switcher.addEventListener('change', (event) => {
+        const selectedLang = event.target.value;
+        localStorage.setItem('preferredLanguage', selectedLang);
+        toggleLanguage(selectedLang);
+    });
+
+    function toggleLanguage(lang) {
+        const pageTitle = document.getElementById('page-title');
+        const mainHeading = document.getElementById('main-heading');
+        const headertext = document.getElementById('header-text');
+        if (lang === 'es') {
+            contentEn.classList.add('hidden');
+            contentEs.classList.remove('hidden');
+            pageTitle.textContent = 'Centro de Ayuda';
+            mainHeading.textContent = 'Centro de Ayuda';
+            headertext.textContent = 'Encuentra respuestas a tus preguntas a continuación.';
+        } else {
+            contentEs.classList.add('hidden');
+            contentEn.classList.remove('hidden');
+            pageTitle.textContent = 'Help Center';
+            mainHeading.textContent = 'Help Center';
+            headertext.textContent = 'Find answers to your questions below.';
+        }
+    }
+</script>
+</body>
+</html>
